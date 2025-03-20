@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inquilinos - Sistema de Administración Praga</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Agregar SheetJS para exportación a Excel -->
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body class="dark">
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="header">
+    <h2 class="header-title">Sistema de Administración Praga</h2>
+    <div class="user-menu">
+      <div class="notification-badge" id="notificationBadge">
+        <i class="fa-solid fa-bell" style="color: var(--gold); font-size: 1.25rem;"></i>
+        <span class="badge" id="notificationCount">0</span>
+      </div>
+      <div class="avatar" id="userMenuTrigger">
+        <i class="fa-solid fa-user-circle"></i>
+      </div>
+      <div class="dropdown-menu" id="userMenu">
+        <div class="dropdown-header">
+          <p class="user-name">Administrador</p>
+          <p class="user-email">admin@hotel.com</p>
+          <p class="user-role">Administrador</p>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item" id="createUserBtn">
+          <i class="fa-solid fa-user-plus"></i>
+          Crear nuevo usuario
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item logout-btn">
+          <i class="fa-solid fa-sign-out-alt"></i>
+          Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-title">Hotel Praga</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="dashboard.html"><i class="fa-solid fa-hotel"></i> Inicio</a></li>
+          <li><a href="visitors.html"><i class="fa-solid fa-user-friends"></i> Visitantes</a></li>
+          <li><a href="tenants.html" class="active"><i class="fa-solid fa-users"></i> Inquilinos</a></li>
+          <li><a href="rooms.html"><i class="fa-solid fa-door-open"></i> Habitaciones</a></li>
+          <li><a href="expenses.html"><i class="fa-solid fa-money-bill-wave"></i> Gastos</a></li>
+          <li><a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> Reportes</a></li>
+          <li><a href="statistics.html"><i class="fa-solid fa-chart-bar"></i> Estadísticas</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+      <button class="mobile-menu-btn">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="mobile-menu-items">
+        <a href="dashboard.html"><i class="fa-solid fa-hotel"></i> <span>Ini</span></a>
+        <a href="visitors.html"><i class="fa-solid fa-user-friends"></i> <span>Vis</span></a>
+        <a href="tenants.html" class="active"><i class="fa-solid fa-users"></i> <span>Inq</span></a>
+        <a href="rooms.html"><i class="fa-solid fa-door-open"></i> <span>Hab</span></a>
+        <a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> <span>Rep</span></a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <h1 class="page-title">Gestión de Inquilinos</h1>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Registrar Nuevo Inquilino</h2>
+          <p class="card-description">Complete los detalles para registrar un nuevo inquilino</p>
+        </div>
+        <div class="card-content">
+          <form id="tenantForm" class="form-grid">
+            <div class="form-group">
+              <label for="name">Nombre Completo</label>
+              <input type="text" id="name" name="name" placeholder="Ingrese nombre completo" required>
+            </div>
+
+            <div class="form-group">
+              <label for="documentId">Documento de Identidad</label>
+              <input type="text" id="documentId" name="documentId" placeholder="Ingrese número de documento" required>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Teléfono Celular</label>
+              <input type="text" id="phone" name="phone" placeholder="Ingrese número de teléfono" required>
+            </div>
+
+            <div class="form-group">
+              <label for="floor">Piso</label>
+              <select id="floor" name="floor" required>
+                <option value="">Seleccione piso</option>
+                <option value="1">Piso 1</option>
+                <option value="2">Piso 2</option>
+                <option value="3">Piso 3</option>
+                <option value="4">Piso 4</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="roomNumber">Número de Habitación</label>
+              <select id="roomNumber" name="roomNumber" required disabled>
+                <option value="">Seleccione piso primero</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="paymentDate">Fecha de Pago</label>
+              <input type="date" id="paymentDate" name="paymentDate" required>
+            </div>
+
+            <div class="form-group">
+              <label for="payment">Valor a Pagar</label>
+              <input type="number" id="payment" name="payment" placeholder="Ingrese monto" required>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Registrar Inquilino
+              </button>
+            </div>
+          </form>
+        </div>
+      </div><br>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Registro de Inquilinos</h2>
+          <p class="card-description">Lista de todos los inquilinos registrados</p>
+          <button class="btn btn-outline" onclick="exportToExcel()">
+            <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+          </button>
+        </div>
+        <div class="card-content">
+          <div class="table-container">
+            <table id="tenantsTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Documento</th>
+                  <th>Teléfono</th>
+                  <th>Habitación</th>
+                  <th>Fecha de Pago</th>
+                  <th>Pago</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Los datos se cargarán dinámicamente con JavaScript -->
+              </tbody>
+            </table>
+            <div id="emptyTenants" class="empty-state">
+              No hay inquilinos registrados
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Panel de notificaciones -->
+<div class="notifications-panel" id="notificationsPanel">
+  <div class="notifications-header">
+    <h2 class="notifications-title">Notificaciones</h2>
+    <button class="notifications-close" id="closeNotifications">
+      <i class="fa-solid fa-times"></i>
+    </button>
+  </div>
+  <div class="notifications-list" id="notificationsList">
+    <!-- Las notificaciones se cargarán dinámicamente -->
+  </div>
+</div>
+
+<!-- Modal para crear usuario (solo visible para administradores) -->
+<div class="modal" id="createUserModal">
+  <div class="modal-content" style="background-color: #000; border: 1px solid var(--gold); padding: 20px; width: 400px; max-width: 90%;">
+    <span class="modal-close" id="closeUserModal">&times;</span>
+    <h2 style="color: var(--gold); margin-bottom: 20px;">Crear Nuevo Usuario</h2>
+    <form id="createUserForm">
+      <div class="form-group">
+        <label for="newUsername">Nombre de Usuario</label>
+        <input type="text" id="newUsername" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="newPassword">Contraseña</label>
+        <input type="password" id="newPassword" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="newName">Nombre Completo</label>
+        <input type="text" id="newName" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="newEmail">Correo Electrónico</label>
+        <input type="email" id="newEmail" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="newRole">Rol</label>
+        <select id="newRole" name="role" required>
+          <option value="admin">Administrador</option>
+          <option value="recepcionista" selected>Recepcionista</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Crear Usuario</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/tenants.js"></script>
+<script src="js/auto-refresh.js"></script>
+</body>
+</html>
+

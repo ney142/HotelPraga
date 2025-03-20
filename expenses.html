@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gastos - Sistema de Administración Praga</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Agregar SheetJS para exportación a Excel -->
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body class="dark">
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="header">
+    <h2 class="header-title">Sistema de Administración Praga</h2>
+    <div class="user-menu">
+      <div class="notification-badge" id="notificationBadge">
+        <i class="fa-solid fa-bell" style="color: var(--gold); font-size: 1.25rem;"></i>
+        <span class="badge" id="notificationCount">0</span>
+      </div>
+      <div class="avatar" id="userMenuTrigger">
+        <i class="fa-solid fa-user-circle"></i>
+      </div>
+      <div class="dropdown-menu" id="userMenu">
+        <div class="dropdown-header">
+          <p class="user-name">Administrador</p>
+          <p class="user-email">admin@hotel.com</p>
+          <p class="user-role">Administrador</p>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item" id="createUserBtn">
+          <i class="fa-solid fa-user-plus"></i>
+          Crear nuevo usuario
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item logout-btn">
+          <i class="fa-solid fa-sign-out-alt"></i>
+          Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-title">Hotel Praga</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="dashboard.html"><i class="fa-solid fa-hotel"></i> Inicio</a></li>
+          <li><a href="visitors.html"><i class="fa-solid fa-user-friends"></i> Visitantes</a></li>
+          <li><a href="tenants.html"><i class="fa-solid fa-users"></i> Inquilinos</a></li>
+          <li><a href="rooms.html"><i class="fa-solid fa-door-open"></i> Habitaciones</a></li>
+          <li><a href="expenses.html" class="active"><i class="fa-solid fa-money-bill-wave"></i> Gastos</a></li>
+          <li><a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> Reportes</a></li>
+          <li><a href="statistics.html"><i class="fa-solid fa-chart-bar"></i> Estadísticas</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+      <button class="mobile-menu-btn">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="mobile-menu-items">
+        <a href="dashboard.html"><i class="fa-solid fa-hotel"></i> <span>Ini</span></a>
+        <a href="visitors.html"><i class="fa-solid fa-user-friends"></i> <span>Vis</span></a>
+        <a href="tenants.html"><i class="fa-solid fa-users"></i> <span>Inq</span></a>
+        <a href="rooms.html"><i class="fa-solid fa-door-open"></i> <span>Hab</span></a>
+        <a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> <span>Rep</span></a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <h1 class="page-title">Gestión de Gastos</h1>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Registrar Nuevo Gasto</h2>
+          <p class="card-description">Registre un nuevo gasto con recibo</p>
+        </div>
+        <div class="card-content">
+          <form id="expenseForm" class="form-grid">
+            <div class="form-group">
+              <label for="name">Nombre del Producto/Servicio</label>
+              <input type="text" id="name" name="name" placeholder="Ingrese nombre" required>
+            </div>
+
+            <div class="form-group">
+              <label for="amount">Valor</label>
+              <input type="number" id="amount" name="amount" placeholder="Ingrese monto" required>
+            </div>
+
+            <div class="form-group">
+              <label for="date">Fecha</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="expenseType">Tipo de Gasto</label>
+              <select id="expenseType" name="expenseType" required>
+                <option value="">Seleccione tipo</option>
+                <option value="servicios">Servicios</option>
+                <option value="productos">Productos</option>
+                <option value="novedades">Novedades</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="receipt">Imagen del Recibo</label>
+              <input type="file" id="receipt" name="receipt" accept="image/*">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="notes">Descripción</label>
+              <textarea id="notes" name="notes" placeholder="Ingrese detalles sobre el gasto" rows="4"></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-plus"></i> Registrar Gasto
+              </button>
+            </div>
+          </form>
+        </div>
+      </div><br>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Registro de Gastos</h2>
+          <p class="card-description">Lista de todos los gastos registrados</p>
+          <button class="btn btn-outline" onclick="exportToExcel()">
+            <i class="fa-solid fa-file-excel"></i> Exportar a Excel
+          </button>
+        </div>
+        <div class="card-content">
+          <div class="table-container">
+            <table id="expensesTable" class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Valor</th>
+                  <th>Fecha</th>
+                  <th>Tipo</th>
+                  <th>Descripción</th>
+                  <th>Recibo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Los datos se cargarán dinámicamente con JavaScript -->
+              </tbody>
+            </table>
+            <div id="emptyExpenses" class="empty-state">
+              No hay gastos registrados
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Panel de notificaciones -->
+<div class="notifications-panel" id="notificationsPanel">
+  <div class="notifications-header">
+    <h2 class="notifications-title">Notificaciones</h2>
+    <button class="notifications-close" id="closeNotifications">
+      <i class="fa-solid fa-times"></i>
+    </button>
+  </div>
+  <div class="notifications-list" id="notificationsList">
+    <!-- Las notificaciones se cargarán dinámicamente -->
+  </div>
+</div>
+
+<!-- Modal para crear usuario (solo visible para administradores) -->
+<div class="modal" id="createUserModal">
+  <div class="modal-content" style="background-color: #000; border: 1px solid var(--gold); padding: 20px; width: 400px; max-width: 90%;">
+    <span class="modal-close" id="closeUserModal">&times;</span>
+    <h2 style="color: var(--gold); margin-bottom: 20px;">Crear Nuevo Usuario</h2>
+    <form id="createUserForm">
+      <div class="form-group">
+        <label for="newUsername">Nombre de Usuario</label>
+        <input type="text" id="newUsername" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="newPassword">Contraseña</label>
+        <input type="password" id="newPassword" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="newName">Nombre Completo</label>
+        <input type="text" id="newName" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="newEmail">Correo Electrónico</label>
+        <input type="email" id="newEmail" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="newRole">Rol</label>
+        <select id="newRole" name="role" required>
+          <option value="admin">Administrador</option>
+          <option value="recepcionista" selected>Recepcionista</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Crear Usuario</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/expenses.js"></script>
+<script src="js/auto-refresh.js"></script>
+</body>
+</html>
+

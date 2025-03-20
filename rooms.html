@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habitaciones - Sistema de Administración Praga</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark">
+  <div class="dashboard-container">
+    <!-- Header -->
+    <header class="header">
+      <h2 class="header-title">Sistema de Administración Praga</h2>
+      <div class="user-menu">
+        <div class="notification-badge" id="notificationBadge">
+          <i class="fa-solid fa-bell" style="color: var(--gold); font-size: 1.25rem;"></i>
+          <span class="badge" id="notificationCount">0</span>
+        </div>
+        <div class="avatar" id="userMenuTrigger">
+          <i class="fa-solid fa-user-circle"></i>
+        </div>
+        <div class="dropdown-menu" id="userMenu">
+          <div class="dropdown-header">
+            <p class="user-name">Administrador</p>
+            <p class="user-email">admin@hotel.com</p>
+            <p class="user-role">Administrador</p>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item" id="createUserBtn">
+            <i class="fa-solid fa-user-plus"></i>
+            Crear nuevo usuario
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="#" class="dropdown-item logout-btn">
+            <i class="fa-solid fa-sign-out-alt"></i>
+            Cerrar sesión
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="main-container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h1 class="sidebar-title">Hotel Praga</h1>
+        </div>
+        <nav class="sidebar-nav">
+          <ul>
+            <li><a href="dashboard.html"><i class="fa-solid fa-hotel"></i> Inicio</a></li>
+            <li><a href="visitors.html"><i class="fa-solid fa-user-friends"></i> Visitantes</a></li>
+            <li><a href="tenants.html"><i class="fa-solid fa-users"></i> Inquilinos</a></li>
+            <li><a href="rooms.html" class="active"><i class="fa-solid fa-door-open"></i> Habitaciones</a></li>
+            <li><a href="expenses.html"><i class="fa-solid fa-money-bill-wave"></i> Gastos</a></li>
+            <li><a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> Reportes</a></li>
+            <li><a href="statistics.html"><i class="fa-solid fa-chart-bar"></i> Estadísticas</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Mobile Navigation -->
+      <div class="mobile-nav">
+        <button class="mobile-menu-btn">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="mobile-menu-items">
+          <a href="dashboard.html"><i class="fa-solid fa-hotel"></i> <span>Ini</span></a>
+          <a href="visitors.html"><i class="fa-solid fa-user-friends"></i> <span>Vis</span></a>
+          <a href="tenants.html"><i class="fa-solid fa-users"></i> <span>Inq</span></a>
+          <a href="rooms.html" class="active"><i class="fa-solid fa-door-open"></i> <span>Hab</span></a>
+          <a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> <span>Rep</span></a>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <h1 class="page-title">Gestión de Habitaciones</h1>
+
+        <div class="stats-grid">
+          <div class="card stat-card">
+            <div class="card-header">
+              <h3 class="stat-title">Total Habitaciones</h3>
+            </div>
+            <div class="card-content">
+              <p id="totalRooms" class="stat-value">0</p>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="card-header">
+              <h3 class="stat-title">Disponibles</h3>
+            </div>
+            <div class="card-content">
+              <p id="availableRooms" class="stat-value available">0</p>
+            </div>
+          </div>
+
+          <div class="card stat-card">
+            <div class="card-header">
+              <h3 class="stat-title">Ocupadas</h3>
+            </div>
+            <div class="card-content">
+              <p id="occupiedRooms" class="stat-value occupied">0</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Estado de Habitaciones por Piso</h2>
+            <p class="card-description">Ver y gestionar habitaciones por piso</p>
+          </div>
+          <div class="card-content">
+            <div class="tabs">
+              <div class="tabs-list">
+                <button class="tab-trigger active" data-tab="floor1">Piso 1</button>
+                <button class="tab-trigger" data-tab="floor2">Piso 2</button>
+                <button class="tab-trigger" data-tab="floor3">Piso 3</button>
+                <button class="tab-trigger" data-tab="floor4">Piso 4</button>
+              </div>
+
+              <div class="tab-content active" id="floor1">
+                <div class="rooms-grid" id="floor1Rooms">
+                  <!-- Las habitaciones se cargarán dinámicamente con JavaScript -->
+                </div>
+              </div>
+
+              <div class="tab-content" id="floor2">
+                <div class="rooms-grid" id="floor2Rooms">
+                  <!-- Las habitaciones se cargarán dinámicamente con JavaScript -->
+                </div>
+              </div>
+
+              <div class="tab-content" id="floor3">
+                <div class="rooms-grid" id="floor3Rooms">
+                  <!-- Las habitaciones se cargarán dinámicamente con JavaScript -->
+                </div>
+              </div>
+
+              <div class="tab-content" id="floor4">
+                <div class="rooms-grid" id="floor4Rooms">
+                  <!-- Las habitaciones se cargarán dinámicamente con JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Panel de notificaciones -->
+  <div class="notifications-panel" id="notificationsPanel">
+    <div class="notifications-header">
+      <h2 class="notifications-title">Notificaciones</h2>
+      <button class="notifications-close" id="closeNotifications">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    </div>
+    <div class="notifications-list" id="notificationsList">
+      <!-- Las notificaciones se cargarán dinámicamente -->
+    </div>
+  </div>
+
+  <!-- Modal para crear usuario (solo visible para administradores) -->
+  <div class="modal" id="createUserModal">
+    <div class="modal-content" style="background-color: #000; border: 1px solid var(--gold); padding: 20px; width: 400px; max-width: 90%;">
+      <span class="modal-close" id="closeUserModal">&times;</span>
+      <h2 style="color: var(--gold); margin-bottom: 20px;">Crear Nuevo Usuario</h2>
+      <form id="createUserForm">
+        <div class="form-group">
+          <label for="newUsername">Nombre de Usuario</label>
+          <input type="text" id="newUsername" name="username" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Contraseña</label>
+          <input type="password" id="newPassword" name="password" required>
+        </div>
+        <div class="form-group">
+          <label for="newName">Nombre Completo</label>
+          <input type="text" id="newName" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="newEmail">Correo Electrónico</label>
+          <input type="email" id="newEmail" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="newRole">Rol</label>
+          <select id="newRole" name="role" required>
+            <option value="admin">Administrador</option>
+            <option value="recepcionista" selected>Recepcionista</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Crear Usuario</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/common.js"></script>
+  <script src="js/rooms.js"></script>
+  <script src="js/auto-refresh.js"></script>
+</body>
+</html>
+

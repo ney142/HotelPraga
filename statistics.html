@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estadísticas - Sistema de Administración Praga</title>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Agregar SheetJS para exportación a Excel -->
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body class="dark">
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="header">
+    <h2 class="header-title">Sistema de Administración Praga</h2>
+    <div class="user-menu">
+      <div class="notification-badge" id="notificationBadge">
+        <i class="fa-solid fa-bell" style="color: var(--gold); font-size: 1.25rem;"></i>
+        <span class="badge" id="notificationCount">0</span>
+      </div>
+      <div class="avatar" id="userMenuTrigger">
+        <i class="fa-solid fa-user-circle"></i>
+      </div>
+      <div class="dropdown-menu" id="userMenu">
+        <div class="dropdown-header">
+          <p class="user-name">Administrador</p>
+          <p class="user-email">admin@hotel.com</p>
+          <p class="user-role">Administrador</p>
+        </div>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item" id="createUserBtn">
+          <i class="fa-solid fa-user-plus"></i>
+          Crear nuevo usuario
+        </a>
+        <div class="dropdown-divider"></div>
+        <a href="#" class="dropdown-item logout-btn">
+          <i class="fa-solid fa-sign-out-alt"></i>
+          Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="sidebar-title">Hotel Praga</h1>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="dashboard.html"><i class="fa-solid fa-hotel"></i> Inicio</a></li>
+          <li><a href="visitors.html"><i class="fa-solid fa-user-friends"></i> Visitantes</a></li>
+          <li><a href="tenants.html"><i class="fa-solid fa-users"></i> Inquilinos</a></li>
+          <li><a href="rooms.html"><i class="fa-solid fa-door-open"></i> Habitaciones</a></li>
+          <li><a href="expenses.html"><i class="fa-solid fa-money-bill-wave"></i> Gastos</a></li>
+          <li><a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> Reportes</a></li>
+          <li><a href="statistics.html" class="active"><i class="fa-solid fa-chart-bar"></i> Estadísticas</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+      <button class="mobile-menu-btn">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="mobile-menu-items">
+        <a href="dashboard.html"><i class="fa-solid fa-hotel"></i> <span>Ini</span></a>
+        <a href="visitors.html"><i class="fa-solid fa-user-friends"></i> <span>Vis</span></a>
+        <a href="tenants.html"><i class="fa-solid fa-users"></i> <span>Inq</span></a>
+        <a href="rooms.html"><i class="fa-solid fa-door-open"></i> <span>Hab</span></a>
+        <a href="reports.html"><i class="fa-solid fa-clipboard-list"></i> <span>Rep</span></a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <h1 class="page-title">Estadísticas e Informes</h1>
+
+      <div class="tabs">
+        <div class="tabs-list">
+          <button class="tab-trigger active" data-tab="monthly">Informes Mensuales</button>
+          <button class="tab-trigger" data-tab="shifts">Informes de Turno</button>
+        </div>
+
+        <div class="tab-content active" id="monthly">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Informe de Rendimiento Mensual</h2>
+              <p class="card-description">Ver y generar estadísticas mensuales</p>
+            </div>
+            <div class="card-content">
+              <div class="filter-controls">
+                <div class="form-group">
+                  <label for="month">Mes</label>
+                  <select id="month" name="month">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="year">Año</label>
+                  <select id="year" name="year">
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                  </select>
+                </div>
+
+                <div class="form-actions">
+                  <button id="generateReport" class="btn btn-primary">
+                    <i class="fa-solid fa-download"></i> Generar Informe
+                  </button>
+                  <button id="printReport" class="btn btn-outline">
+                    <i class="fa-solid fa-print"></i> Imprimir
+                  </button>
+                </div>
+              </div>
+              <div class="stats-grid">
+                <div class="card stat-card">
+                  <div class="card-header">
+                    <h3 class="stat-title">Ingresos Totales</h3>
+                  </div>
+                  <div class="card-content">
+                    <p id="totalRevenue" class="stat-value revenue">$0</p>
+                  </div>
+                </div>
+
+                <div class="card stat-card">
+                  <div class="card-header">
+                    <h3 class="stat-title">Gastos Totales</h3>
+                  </div>
+                  <div class="card-content">
+                    <p id="totalExpenses" class="stat-value expenses">$0</p>
+                  </div>
+                </div>
+
+                <div class="card stat-card">
+                  <div class="card-header">
+                    <h3 class="stat-title">Beneficio Neto</h3>
+                  </div>
+                  <div class="card-content">
+                    <p id="netProfit" class="stat-value profit">$0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="shifts">
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">Informes de Turno</h2>
+              <p class="card-description">Gestionar y ver informes de turno</p>
+            </div>
+            <div class="card-content">
+              <div class="form-actions right-aligned">
+                <button id="endShift" class="btn btn-primary">
+                  Finalizar Turno Actual
+                </button>
+              </div>
+
+              <div class="table-container">
+                <table id="shiftsTable" class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Fecha</th>
+                      <th>Turno</th>
+                      <th>Empleado</th>
+                      <th>Visitantes</th>
+                      <th>Ingresos</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Los datos se cargarán dinámicamente con JavaScript -->
+                  </tbody>
+                </table>
+                <div id="emptyShifts" class="empty-state">
+                  No hay informes de turno registrados
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Panel de notificaciones -->
+<div class="notifications-panel" id="notificationsPanel">
+  <div class="notifications-header">
+    <h2 class="notifications-title">Notificaciones</h2>
+    <button class="notifications-close" id="closeNotifications">
+      <i class="fa-solid fa-times"></i>
+    </button>
+  </div>
+  <div class="notifications-list" id="notificationsList">
+    <!-- Las notificaciones se cargarán dinámicamente -->
+  </div>
+</div>
+
+<!-- Modal para crear usuario (solo visible para administradores) -->
+<div class="modal" id="createUserModal">
+  <div class="modal-content" style="background-color: #000; border: 1px solid var(--gold); padding: 20px; width: 400px; max-width: 90%;">
+    <span class="modal-close" id="closeUserModal">&times;</span>
+    <h2 style="color: var(--gold); margin-bottom: 20px;">Crear Nuevo Usuario</h2>
+    <form id="createUserForm">
+      <div class="form-group">
+        <label for="newUsername">Nombre de Usuario</label>
+        <input type="text" id="newUsername" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="newPassword">Contraseña</label>
+        <input type="password" id="newPassword" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="newName">Nombre Completo</label>
+        <input type="text" id="newName" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="newEmail">Correo Electrónico</label>
+        <input type="email" id="newEmail" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="newRole">Rol</label>
+        <select id="newRole" name="role" required>
+          <option value="admin">Administrador</option>
+          <option value="recepcionista" selected>Recepcionista</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Crear Usuario</button>
+    </form>
+  </div>
+</div>
+
+<script src="js/common.js"></script>
+<script src="js/statistics.js"></script>
+<script src="js/auto-refresh.js"></script>
+</body>
+</html>
+
